@@ -6,6 +6,8 @@ import com.buskitorang.data.response.LogoutResponse
 import com.buskitorang.data.response.RegisterResponse
 import com.buskitorang.data.response.RouteOriginResponse
 import com.buskitorang.data.response.TicketsByRouteResponse
+import com.buskitorang.data.response.UserTicketsResponse
+import com.buskitorang.data.response.UserTicketsResponseItem
 import com.buskitorang.data.retrofit.ApiServices
 
 class BusRepository(private val apiServices: ApiServices) {
@@ -32,5 +34,9 @@ class BusRepository(private val apiServices: ApiServices) {
 
     suspend fun getTicketsByRoute(id: Int): TicketsByRouteResponse {
         return apiServices.getTicketsByRoute(id)
+    }
+
+    suspend fun getUserTickets(token: String): List<UserTicketsResponseItem> {
+        return apiServices.getUserTickets(token)
     }
 }

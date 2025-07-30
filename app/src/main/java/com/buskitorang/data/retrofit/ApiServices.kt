@@ -1,12 +1,13 @@
 package com.buskitorang.data.retrofit
 
-import com.buskitorang.data.pref.SystemPreferences
 import com.buskitorang.data.response.DetailBusResponse
 import com.buskitorang.data.response.LoginResponse
 import com.buskitorang.data.response.LogoutResponse
 import com.buskitorang.data.response.RegisterResponse
 import com.buskitorang.data.response.RouteOriginResponse
 import com.buskitorang.data.response.TicketsByRouteResponse
+import com.buskitorang.data.response.UserTicketsResponse
+import com.buskitorang.data.response.UserTicketsResponseItem
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -60,6 +61,13 @@ interface ApiServices
     suspend fun getTicketsByRoute(
         @Path("id") id : Int
     ): TicketsByRouteResponse
+
+    @GET("passenger/tickets")
+    @Headers("Accept: application/json")
+    suspend fun getUserTickets(
+        @Header("Authorization")token : String
+    ): List<UserTicketsResponseItem>
+
 
 
 

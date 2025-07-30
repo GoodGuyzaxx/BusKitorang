@@ -42,11 +42,13 @@ class RouteListAdapter: ListAdapter<BusesItem, RouteListAdapter.RouteViewHoler>(
             val convertArrivalTime = ConvertUtils().convertToHourMinuteLocalDateTime(data.arrivalTime)
             val convertDepartedTime = ConvertUtils().convertToHourMinuteLocalDateTime(data.departureTime)
             val getPrice = ConvertUtils().formatToRupiah(data.price.toDouble())
-            binding.tvDestination.text= data.destination
-            binding.tvPrice.text = getPrice
-            binding.tvStatus.text = data.status
-            binding.tvDepartureTime.text = convertDepartedTime
-            binding.tvArrivalTime.text = convertArrivalTime.toString()
+            binding.apply {
+                tvDestination.text= data.destination
+                tvPrice.text = getPrice
+                tvStatus.text = data.status
+                tvDepartureTime.text = convertDepartedTime
+                tvArrivalTime.text = convertArrivalTime.toString()
+            }
 
             binding.btnDetail.setOnClickListener {
                 val i = Intent(binding.root.context, DetailBusActivity::class.java)

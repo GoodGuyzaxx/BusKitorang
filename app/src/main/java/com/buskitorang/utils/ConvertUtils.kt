@@ -38,4 +38,11 @@ class ConvertUtils {
         // 4. Format objek LocalDateTime ke string Jam:Menit
         return dateTime.format(outputFormatter)
     }
+
+    fun convertToDayMonthYear(date : String): String{
+        val parser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'") // Perhatikan 'Z' dan 'T' di-escape
+        val dateTime = LocalDateTime.parse(date, parser)
+        val outputFormatter = DateTimeFormatter.ofPattern("dd:MM:yyyy")
+        return dateTime.format(outputFormatter)
+    }
 }

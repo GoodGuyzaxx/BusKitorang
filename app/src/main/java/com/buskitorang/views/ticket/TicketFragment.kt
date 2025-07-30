@@ -1,60 +1,74 @@
 package com.buskitorang.views.ticket
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.buskitorang.R
+import com.buskitorang.adaptor.TicketsListAdapter
+import com.buskitorang.data.response.Bus
+import com.buskitorang.data.response.Route
+import com.buskitorang.data.response.UserTicketsResponseItem
+import com.buskitorang.databinding.FragmentTicketBinding
+import com.buskitorang.utils.Defaults
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TicketFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class TicketFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding : FragmentTicketBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel : TicketViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ticket, container, false)
+        _binding = FragmentTicketBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TicketFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TicketFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+
+        viewModel.getAuth().observe(viewLifecycleOwner) { auth ->
+            val token = auth.token
+            viewModel.getUserTickets("Bearer $token")
+        }
+
+
+        viewModel.userTicketResponse.observe(viewLifecycleOwner){
+            if (it.size == 0){
+                binding.rvTiketList.visibility = View.GONE
+                binding.LayoutHolderTiketEmpty.visibility = View.VISIBLE
+            } else {
+                setUpRecycleView(it)
             }
+        }
+
+
+
+    }
+
+    private fun setUpRecycleView(data : List<UserTicketsResponseItem>){
+        val ticketLayoutManager = LinearLayoutManager(requireActivity())
+        binding.rvTiketList.layoutManager =ticketLayoutManager
+        val ticketAdapter = TicketsListAdapter()
+        ticketAdapter.submitList(data)
+        binding.rvTiketList.adapter = ticketAdapter
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null // hindari memory leak
     }
 }
