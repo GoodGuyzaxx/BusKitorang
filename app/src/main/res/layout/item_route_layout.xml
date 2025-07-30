@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:id="@+id/btn_detail"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Bus Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_directions_bus"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/tvBusName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="DAMRI"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="DAMRI" />
+
+            <!-- Status Badge -->
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AKTIF"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                tools:text="AKTIF" />
+
+        </LinearLayout>
+
+        <!-- Route Time Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <!-- Departure -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDepartureTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="07:00"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="07:00" />
+
+                <TextView
+                    android:id="@+id/tvOrigin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jayapura"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp"
+                    tools:text="Jayapura" />
+
+            </LinearLayout>
+
+            <!-- Arrow -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_arrow_forward"
+                     />
+
+            </LinearLayout>
+
+            <!-- Arrival -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/tvArrivalTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10:30"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="10:30" />
+
+                <TextView
+                    android:id="@+id/tvDestination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sarmi"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp"
+                    tools:text="Sarmi" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="8dp" />
+
+        <!-- Price & Book Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Price -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Harga"
+                    android:textSize="12sp"
+                     />
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rp 150.000"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="2dp"
+                    tools:text="Rp 150.000" />
+
+            </LinearLayout>
+
+            <!-- Book Button -->
+            <Button
+                android:id="@+id/btnBook"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Pilih Tiket"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+
+                android:paddingHorizontal="20dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
