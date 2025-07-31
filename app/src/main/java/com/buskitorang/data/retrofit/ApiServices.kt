@@ -7,6 +7,7 @@ import com.buskitorang.data.response.LogoutResponse
 import com.buskitorang.data.response.RegisterResponse
 import com.buskitorang.data.response.RouteOriginResponse
 import com.buskitorang.data.response.TicketsByRouteResponse
+import com.buskitorang.data.response.TicketsByRouteResponseItem
 import com.buskitorang.data.response.UserPaymentsResponse
 import com.buskitorang.data.response.UserPaymentsResponseItem
 import com.buskitorang.data.response.UserTicketsResponse
@@ -63,7 +64,7 @@ interface ApiServices
     @Headers("Accept: application/json")
     suspend fun getTicketsByRoute(
         @Path("id") id : Int
-    ): TicketsByRouteResponse
+    ): List<TicketsByRouteResponseItem>
 
     @GET("passenger/tickets")
     @Headers("Accept: application/json")
