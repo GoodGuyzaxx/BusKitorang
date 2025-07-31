@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.buskitorang.data.response.DetailBusResponse
 import com.buskitorang.data.response.TicketsByRouteResponse
 import com.buskitorang.repository.BusRepository
 import com.google.gson.Gson
@@ -30,6 +31,23 @@ class SeatViewModel @Inject constructor(private val repository: BusRepository): 
                 val errorBody = Gson().fromJson(errorString, TicketsByRouteResponse::class.java)
                 _ticketsResponse.postValue(errorBody)
                 Log.d(TAG, "getTicketsByRoute: ${errorBody}")
+            }catch (e: Exception){
+
+            }
+        }
+    }
+
+    private val _busResponse = MutableLiveData<DetailBusResponse>()
+    val busResponse: LiveData<DetailBusResponse> = _busResponse
+
+
+    fun getBusDetail(id : Int){
+        viewModelScope.launch {
+            try {
+                val response = repository.getBusDetail(id)
+                _busResponse.postValue(response)
+            }catch (e: HttpException){
+
             }catch (e: Exception){
 
             }

@@ -1,6 +1,7 @@
 package com.buskitorang.adaptor
 
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.buskitorang.R
 import com.buskitorang.data.response.UserTicketsResponseItem
 import com.buskitorang.databinding.ItemTiketLayoutBinding
 import com.buskitorang.utils.ConvertUtils
+import com.buskitorang.views.payment.PaymentActivity
 
 class TicketsListAdapter: ListAdapter<UserTicketsResponseItem, TicketsListAdapter.TicketViewHolder>(DIFF_CALLBACK){
     class TicketViewHolder(private val binding: ItemTiketLayoutBinding): RecyclerView.ViewHolder(binding.root) {
@@ -30,6 +32,15 @@ class TicketsListAdapter: ListAdapter<UserTicketsResponseItem, TicketsListAdapte
                 binding.tvTicketStatus.text = "Belum Bayar"
                 binding.tvTicketStatus.background = binding.root.context.getDrawable(R.drawable.seat_occupied)
                 binding.btnAction.text = "Bayar"
+                binding.btnAction.setOnClickListener {
+                    val i = Intent(binding.root.context, PaymentActivity::class.java)
+                    i.putExtra("ID_VALUE", data.routeId)
+                    i.putExtra("WAKTU_BERANGKAT",data.route.departureTime )
+                    i.putExtra("WAKTU_TIBA",data.route.arrivalTime )
+                    i.putExtra("RUTE_AWAL", data.route.origin)
+                    i.putExtra("RUTE_TIBA", data.route.destination)
+                    binding.root.context.startActivity(i)
+                }
 
 
             }else if (data.paymentStatus == "paid"){

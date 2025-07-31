@@ -44,6 +44,7 @@
                     android:layout_marginStart="16dp" />
 
                 <TextView
+                    android:id="@+id/id_tiket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -237,29 +238,7 @@
                         android:layout_marginBottom="12dp" />
 
                     <!-- Ticket Price -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Harga Tiket"
-                            android:textSize="14sp"
-                            />
-
-                        <TextView
-                            android:id="@+id/tvTicketPrice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Rp 150.000"
-                            android:textSize="14sp"
-                            tools:text="Rp 150.000" />
-
-                    </LinearLayout>
 
                     <!-- Total -->
                     <LinearLayout
@@ -280,7 +259,7 @@
                             android:id="@+id/tvTotalAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Rp 152.500"
+                            android:text="@string/LOADING"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             tools:text="Rp 152.500" />

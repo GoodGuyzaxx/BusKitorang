@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.buskitorang.R
 import com.buskitorang.databinding.ActivityPaymentBinding
-import com.midtrans.sdk.uikit.api.model.CustomColorTheme
+import com.buskitorang.utils.ConvertUtils
 import com.midtrans.sdk.uikit.api.model.TransactionResult
 import com.midtrans.sdk.uikit.external.UiKitApi
 import com.midtrans.sdk.uikit.internal.util.UiKitConstants
@@ -68,12 +70,26 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPaymentBinding
     private val TAG = "PaymentActivity"
 
+    private val viewModel: PaymentViewModel by viewModels()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.btnBack.setOnClickListener {
+            onBackPressed()
+        }
+
+        val idPayment = intent.getIntExtra("ID_VALUE", 0)
+        viewModel.getUserPayment(idPayment)
+
+        setUpData()
+        viewModel.paymentResponse.observe(this){
+            Toast.makeText(this, "value : ${it.first().ticketId}", Toast.LENGTH_LONG).show()
+        }
 
         try {
             buildUiKit()
@@ -84,19 +100,44 @@ class PaymentActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupPaymentButton() {
-        val snapToken = "0a2f07cb-e305-4fb8-a784-1e3d3369318e"
+    private fun setUpData(){
+        val getWaktuTIba = intent.getStringExtra("WAKTU_TIBA") ?: ""
+        val getWaktuBerangkat = intent.getStringExtra("WAKTU_BERANGKAT") ?: ""
+        val getRuteAwal = intent.getStringExtra("RUTE_AWAL") ?: ""
+        val getRuteTiba = intent.getStringExtra("RUTE_TIBA") ?: ""
+        viewModel.paymentResponse.observe(this){ response ->
+            response.first().apply {
+                val arrivalTime = ConvertUtils().convertToHourMinuteLocalDateTime(getWaktuTIba)
+                val departureTime = ConvertUtils().convertToHourMinuteLocalDateTime(getWaktuBerangkat)
+                binding.apply {
+                    idTiket.text = orderId
+                    tvSeatNumber.text = ticket.seatNumber.toString()
+                    tvDate.text = ConvertUtils().convertToDayMonthYear(ticket.createdAt)
+                    tvPassengerName.text = ticket.passenger.name
+                    tvTotalAmount.text = ConvertUtils().formatToRupiah(amount.toDouble())
+                    tvRoute.text = getString(R.string.tempat_holder, getRuteAwal, getRuteTiba)
+                    tvTime.text = getString(R.string.time_holder, departureTime, arrivalTime)
 
-        binding.btnBayar.setOnClickListener {
-            try {
-                UiKitApi.getDefaultInstance().startPaymentUiFlow(
-                    activity = this@PaymentActivity,
-                    launcher = launcher,
-                    snapToken = snapToken
-                )
-            } catch (e: Exception) {
-                Log.e(TAG, "Error starting payment flow: ${e.message}", e)
-                Toast.makeText(this, "Error starting payment: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+        }
+    }
+
+    private fun setupPaymentButton() {
+        viewModel.paymentResponse.observe(this){response ->
+            val snapToken = response.first().paymentUrl
+            binding.btnBayar.setOnClickListener {
+                try {
+                    UiKitApi.getDefaultInstance().startPaymentUiFlow(
+                        activity = this@PaymentActivity,
+                        launcher = launcher,
+                        snapToken = snapToken
+                    )
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error starting payment flow: ${e.message}", e)
+                    Toast.makeText(this, "Error starting payment: ${e.message}", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -116,6 +157,8 @@ class PaymentActivity : AppCompatActivity() {
         val uIKitCustomSetting = UiKitApi.getDefaultInstance().uiKitSetting
         uIKitCustomSetting.saveCardChecked = true
     }
+
+
 
 
 }

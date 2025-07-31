@@ -30,6 +30,17 @@ class SelectSeatActivity : AppCompatActivity() {
         binding = ActivitySelectSeatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val getBusId = intent.getIntExtra("value",0)
+        val getTiba = intent.getStringExtra("TIBA") ?: ""
+        val getBerangkat = intent.getStringExtra("BERANGKAT") ?: ""
+
+        binding.tvRouteInfo.text = getString(R.string.tempat_holder, getBerangkat, getTiba)
+
+        viewModel.getBusDetail(getBusId)
+        viewModel.busResponse.observe(this){
+            binding.tvBusInfo.text = it.bus.name
+        }
+
 
 
         binding.btnContinue.setOnClickListener {

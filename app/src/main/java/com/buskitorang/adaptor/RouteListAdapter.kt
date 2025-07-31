@@ -59,6 +59,9 @@ class RouteListAdapter: ListAdapter<BusesItem, RouteListAdapter.RouteViewHoler>(
             binding.btnBook.setOnClickListener {
                 val i = Intent(binding.root.context, SelectSeatActivity::class.java)
                 i.putExtra("ID_ROUTE", data.id)
+                i.putExtra("value", data.busId)
+                i.putExtra("BERANGKAT", data.origin)
+                i.putExtra("TIBA", data.destination)
                 binding.root.context.startActivity(i)
             }
 

@@ -60,5 +60,6 @@
     <string name="rupiah_holder">Rp.%s</string>
     <string name="total_rute_holder">Ditemukan %s rute tersedia</string>
     <string name="tempat_holder">%1$s → %2$s</string>
+    <string name="time_holder">%1$s - %2$s</string>
     <string name="holer_dipesan">Dipesan: %s</string>
 </resources>

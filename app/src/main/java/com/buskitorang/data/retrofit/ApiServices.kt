@@ -1,11 +1,14 @@
 package com.buskitorang.data.retrofit
 
+
 import com.buskitorang.data.response.DetailBusResponse
 import com.buskitorang.data.response.LoginResponse
 import com.buskitorang.data.response.LogoutResponse
 import com.buskitorang.data.response.RegisterResponse
 import com.buskitorang.data.response.RouteOriginResponse
 import com.buskitorang.data.response.TicketsByRouteResponse
+import com.buskitorang.data.response.UserPaymentsResponse
+import com.buskitorang.data.response.UserPaymentsResponseItem
 import com.buskitorang.data.response.UserTicketsResponse
 import com.buskitorang.data.response.UserTicketsResponseItem
 import retrofit2.http.Field
@@ -67,6 +70,12 @@ interface ApiServices
     suspend fun getUserTickets(
         @Header("Authorization")token : String
     ): List<UserTicketsResponseItem>
+
+    @GET("payments/user/{id}")
+    @Headers("Accept: application/json")
+    suspend fun getUserPayments(
+        @Path("id") id : Int
+    ): List<UserPaymentsResponseItem>
 
 
 
