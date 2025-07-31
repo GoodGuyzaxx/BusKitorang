@@ -36,34 +36,34 @@ class SelectSeatActivity : AppCompatActivity() {
 
         binding.tvRouteInfo.text = getString(R.string.tempat_holder, getBerangkat, getTiba)
 
-        viewModel.getBusDetail(getBusId)
-        viewModel.busResponse.observe(this){
-            binding.tvBusInfo.text = it.bus.name
-        }
-
-
-
-        binding.btnContinue.setOnClickListener {
-            val getRouteID = intent.getIntExtra("ID_ROUTE",0)
-
-            viewModel.getTicketsByRoute(getRouteID)
-        }
-
-//        viewModel.ticketsResponse.observe(this){
-//            if (it.ticketsByRouteResponse. == "unpaid") {
-//                binding.seat1.background = ContextCompat.getDrawable(this,R.drawable.seat_occupied)
-//            }
-//            getStatusSeat(it.ticketsByRouteResponse.get(0).paymentStatus)
-//            Toast.makeText(this@SelectSeatActivity, "${it.ticketsByRouteResponse.get(0).paymentStatus}", Toast.LENGTH_LONG).show()
+//        viewModel.getBusDetail(getBusId)
+//        viewModel.busResponse.observe(this){
+//            binding.tvBusInfo.text = it.bus.name
 //        }
+
 
         binding.btnBack.setOnClickListener {
             onBackPressed()
         }
 
-//        getSeatStatus()
 
-//        setupSeatButtons()
+            val getRouteID = intent.getIntExtra("ID_ROUTE",0)
+
+        viewModel.getTicketsByRoute(getRouteID)
+
+
+        viewModel.ticketsResponse.observe(this){
+            if (it.isEmpty()){
+
+            }
+            viewModel.setOccupiedSeatsFromApi(it)
+        }
+
+
+        setupSeatButtons()
+//
+
+
 
     }
 
@@ -73,32 +73,68 @@ class SelectSeatActivity : AppCompatActivity() {
             val seatId = resources.getIdentifier("seat_$i", "id", packageName)
             val seatButton = findViewById<Button>(seatId)
             seatButtons.add(seatButton)
-
-
-            seatButton.apply {
-                background = ContextCompat.getDrawable(this@SelectSeatActivity,R.drawable.seat_occupied)
-            }
-
-        }
-    }
-
-    private fun getStatusSeat(status : String){
-        for (i in 1..19) {
-            val seatId = resources.getIdentifier("seat_$i", "id", packageName)
-            val seatButton = findViewById<Button>(seatId)
-            seatButtons.add(seatButton)
-            viewModel.ticketsResponse.observe(this){data ->
-
-                if (status == "unpaid"){
-                    seatButton.apply {
-                        background = ContextCompat.getDrawable(this@SelectSeatActivity, R.drawable.seat_available)
+            viewModel.occupiedSeats.observe(this) {
+                if (it.isNotEmpty()) {
+                    if (it.contains(i)){
+                        seatButton.background = ContextCompat.getDrawable(this@SelectSeatActivity, R.drawable.seat_occupied)
+                        seatButton.isEnabled = false
+                        seatButton.tag = "occupied"
                     }
                 }
-
+            }
+            seatButton.setOnClickListener { view ->
+                handleSeatSelection(view as Button, i)
             }
         }
     }
 
+    private fun handleSeatSelection(seatButton: Button, seatNumber: Int) {
+        val seatStatus = seatButton.tag as String
+
+        if (seatStatus == "occupied") {
+            Toast.makeText(this, "Kursi sudah terisi", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Clear previous selection
+        clearSeatSelection()
+
+        // Select new seat
+        if (seatStatus == "available") {
+            selectedSeat = seatNumber
+            seatButton.background = ContextCompat.getDrawable(this, R.drawable.seat_selected)
+            seatButton.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+            seatButton.tag = "selected"
+
+            // Show selected seat info
+            binding.cardSelectedSeat.visibility = View.VISIBLE
+            binding.tvSelectedSeat.text = "Kursi $seatNumber"
+
+            updateUI()
+        }
+    }
+
+    private fun clearSeatSelection() {
+        selectedSeat?.let { seatNum ->
+            val seatId = resources.getIdentifier("seat_$seatNum", "id", packageName)
+            val seatButton = findViewById<Button>(seatId)
+
+            if (seatButton.tag == "selected") {
+                seatButton.background = ContextCompat.getDrawable(this, R.drawable.seat_available)
+                seatButton.setTextColor(ContextCompat.getColor(this, android.R.color.black))
+                seatButton.tag = "available"
+            }
+        }
+        selectedSeat = null
+        binding.cardSelectedSeat.visibility = View.GONE
+    }
+
+    private fun updateUI() {
+        val getBusId = intent.getIntExtra("value",0)
+        val totalPrice = if (selectedSeat != null) getBusId else 0
+        binding.tvTotalPrice.text = "Rp ${NumberFormat.getNumberInstance(Locale("id", "ID")).format(totalPrice)}"
+        binding.btnContinue.isEnabled = selectedSeat != null
+    }
 
 
 }
