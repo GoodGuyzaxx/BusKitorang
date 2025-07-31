@@ -34,7 +34,7 @@ class TicketsListAdapter: ListAdapter<UserTicketsResponseItem, TicketsListAdapte
                 binding.btnAction.text = "Bayar"
                 binding.btnAction.setOnClickListener {
                     val i = Intent(binding.root.context, PaymentActivity::class.java)
-                    i.putExtra("ID_VALUE", data.routeId)
+                    i.putExtra("ID_VALUE", data.id)
                     i.putExtra("WAKTU_BERANGKAT",data.route.departureTime )
                     i.putExtra("WAKTU_TIBA",data.route.arrivalTime )
                     i.putExtra("RUTE_AWAL", data.route.origin)
