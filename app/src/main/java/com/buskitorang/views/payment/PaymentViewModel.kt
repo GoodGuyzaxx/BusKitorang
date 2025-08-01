@@ -3,9 +3,11 @@ package com.buskitorang.views.payment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.buskitorang.data.response.UserPaymentsResponse
-import com.buskitorang.data.response.UserPaymentsResponseItem
+import com.buskitorang.data.pref.AuthModel
+import com.buskitorang.data.pref.SystemPreferences
+import com.buskitorang.data.response.UserPaymentResponseItem
 import com.buskitorang.repository.BusRepository
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,11 +16,14 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
-class PaymentViewModel @Inject constructor(private val repository: BusRepository): ViewModel() {
-    private val _paymentResponse = MutableLiveData<List<UserPaymentsResponseItem>>()
-    val paymentResponse : LiveData<List<UserPaymentsResponseItem>> = _paymentResponse
+class PaymentViewModel @Inject constructor(private val repository: BusRepository, private val pref: SystemPreferences): ViewModel() {
+    private val _paymentResponse = MutableLiveData<List<UserPaymentResponseItem>>()
+    val paymentResponse : LiveData<List<UserPaymentResponseItem>> = _paymentResponse
 
 
+    fun getAuthData(): LiveData<AuthModel>{
+        return pref.getAuthData().asLiveData()
+    }
     fun getUserPayment(id : Int) {
         viewModelScope.launch {
                 val response = repository.getUserPayments(id)

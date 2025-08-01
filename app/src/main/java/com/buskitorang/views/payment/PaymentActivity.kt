@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.buskitorang.R
 import com.buskitorang.databinding.ActivityPaymentBinding
 import com.buskitorang.utils.ConvertUtils
+import com.buskitorang.views.dashboard.DashboardActivity
 import com.midtrans.sdk.uikit.api.model.TransactionResult
 import com.midtrans.sdk.uikit.external.UiKitApi
 import com.midtrans.sdk.uikit.internal.util.UiKitConstants
@@ -80,16 +81,15 @@ class PaymentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnBack.setOnClickListener {
-            onBackPressed()
+            val i = Intent(this, DashboardActivity::class.java)
+            startActivity(i)
+            finish()
         }
 
         val idPayment = intent.getIntExtra("ID_VALUE", 0)
         viewModel.getUserPayment(idPayment)
 
         setUpData()
-        viewModel.paymentResponse.observe(this){
-            Toast.makeText(this, "value : ${it.first().ticketId}", Toast.LENGTH_LONG).show()
-        }
 
         try {
             buildUiKit()
@@ -113,7 +113,9 @@ class PaymentActivity : AppCompatActivity() {
                     idTiket.text = orderId
                     tvSeatNumber.text = ticket.seatNumber.toString()
                     tvDate.text = ConvertUtils().convertToDayMonthYear(ticket.createdAt)
-                    tvPassengerName.text = ticket.passenger.name
+                    viewModel.getAuthData().observe(this@PaymentActivity){
+                        tvPassengerName.text = it.name
+                    }
                     tvTotalAmount.text = ConvertUtils().formatToRupiah(amount.toDouble())
                     tvRoute.text = getString(R.string.tempat_holder, getRuteAwal, getRuteTiba)
                     tvTime.text = getString(R.string.time_holder, departureTime, arrivalTime)
@@ -157,7 +159,6 @@ class PaymentActivity : AppCompatActivity() {
         val uIKitCustomSetting = UiKitApi.getDefaultInstance().uiKitSetting
         uIKitCustomSetting.saveCardChecked = true
     }
-
 
 
 
