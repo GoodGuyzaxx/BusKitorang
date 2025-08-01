@@ -2,9 +2,13 @@ package com.buskitorang.utils
 
 import android.annotation.SuppressLint
 import java.text.NumberFormat
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
+
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+
 
 @SuppressLint("NewApi")
 class ConvertUtils {
@@ -44,5 +48,13 @@ class ConvertUtils {
         val dateTime = LocalDateTime.parse(date, parser)
         val outputFormatter = DateTimeFormatter.ofPattern("dd:MM:yyyy")
         return dateTime.format(outputFormatter)
+    }
+
+    fun formatTanggalIndonesia(isoDateString: String): String {
+        val instant = Instant.parse(isoDateString)
+        val zonedDateTime = instant.atZone(ZoneId.of("Asia/Jayapura")) // atau Asia/Jakarta
+
+        val formatter = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", Locale("id", "ID"))
+        return zonedDateTime.format(formatter)
     }
 }
