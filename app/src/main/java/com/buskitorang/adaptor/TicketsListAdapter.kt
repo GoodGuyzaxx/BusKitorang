@@ -12,6 +12,7 @@ import com.buskitorang.R
 import com.buskitorang.data.response.UserTicketsResponseItem
 import com.buskitorang.databinding.ItemTiketLayoutBinding
 import com.buskitorang.utils.ConvertUtils
+import com.buskitorang.views.detailtiket.DetailTiketActivity
 import com.buskitorang.views.payment.PaymentActivity
 
 class TicketsListAdapter: ListAdapter<UserTicketsResponseItem, TicketsListAdapter.TicketViewHolder>(DIFF_CALLBACK){
@@ -42,10 +43,31 @@ class TicketsListAdapter: ListAdapter<UserTicketsResponseItem, TicketsListAdapte
                     binding.root.context.startActivity(i)
                 }
 
-
             }else if (data.paymentStatus == "paid"){
                 binding.tvTicketStatus.text = "Selesai"
                 binding.tvTicketStatus.background = binding.root.context.getDrawable(R.drawable.seat_available)
+                binding.btnAction.setOnClickListener {
+                    val i = Intent(binding.root.context, DetailTiketActivity::class.java)
+                    i.putExtra("ID_VALUE", data.id)
+                    i.putExtra("WAKTU_BERANGKAT",data.route.departureTime )
+                    i.putExtra("WAKTU_TIBA",data.route.arrivalTime )
+                    i.putExtra("RUTE_AWAL", data.route.origin)
+                    i.putExtra("RUTE_TIBA", data.route.destination)
+                    binding.root.context.startActivity(i)
+                }
+            }else {
+                binding.tvTicketStatus.text = "Pending"
+                binding.tvTicketStatus.background = binding.root.context.getDrawable(R.drawable.seat_pending)
+                binding.btnAction.text = "Lanjutkan"
+                binding.btnAction.setOnClickListener {
+                    val i = Intent(binding.root.context, PaymentActivity::class.java)
+                    i.putExtra("ID_VALUE", data.id)
+                    i.putExtra("WAKTU_BERANGKAT",data.route.departureTime )
+                    i.putExtra("WAKTU_TIBA",data.route.arrivalTime )
+                    i.putExtra("RUTE_AWAL", data.route.origin)
+                    i.putExtra("RUTE_TIBA", data.route.destination)
+                    binding.root.context.startActivity(i)
+                }
             }
         }
     }
