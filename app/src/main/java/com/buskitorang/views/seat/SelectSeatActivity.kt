@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.buskitorang.R
 import com.buskitorang.data.response.TicketsByRouteResponseItem
 import com.buskitorang.databinding.ActivitySelectSeatBinding
+import com.buskitorang.views.redirectToPayment.PaymentConfirm
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.NumberFormat
 import java.util.Locale
@@ -36,34 +37,45 @@ class SelectSeatActivity : AppCompatActivity() {
 
         binding.tvRouteInfo.text = getString(R.string.tempat_holder, getBerangkat, getTiba)
 
-//        viewModel.getBusDetail(getBusId)
-//        viewModel.busResponse.observe(this){
-//            binding.tvBusInfo.text = it.bus.name
-//        }
+        viewModel.getBusDetail(getBusId)
+        viewModel.busResponse.observe(this){
+            binding.tvBusInfo.text = it.bus.name
+        }
 
 
         binding.btnBack.setOnClickListener {
             onBackPressed()
         }
 
-
-            val getRouteID = intent.getIntExtra("ID_ROUTE",0)
-
+        val getRouteID = intent.getIntExtra("ID_ROUTE",0)
         viewModel.getTicketsByRoute(getRouteID)
 
 
         viewModel.ticketsResponse.observe(this){
-            if (it.isEmpty()){
-
+            if (it.isNotEmpty()){
+                viewModel.setOccupiedSeatsFromApi(it)
             }
-            viewModel.setOccupiedSeatsFromApi(it)
+
         }
 
-
         setupSeatButtons()
-//
+        binding.btnContinue.setOnClickListener {
+            val seatValue = binding.tvSelectedSeat.text.toString().toInt()
+            setUpPayment(seatValue)
 
+        }
 
+    }
+
+    private fun setUpPayment(seatNumber: Int){
+        val getRouteID = intent.getIntExtra("ID_ROUTE",0)
+        val bundle = Bundle().apply {
+            putInt("SEAT_VALUE", seatNumber)
+            putInt("ID_ROUTE", getRouteID)
+        }
+        val dialogPaymentConfirm = PaymentConfirm()
+        dialogPaymentConfirm.arguments = bundle
+        dialogPaymentConfirm.show(supportFragmentManager, "costumeDialogPayment")
 
     }
 
@@ -108,9 +120,8 @@ class SelectSeatActivity : AppCompatActivity() {
 
             // Show selected seat info
             binding.cardSelectedSeat.visibility = View.VISIBLE
-            binding.tvSelectedSeat.text = "Kursi $seatNumber"
-
-            updateUI()
+            binding.tvSelectedSeat.text = seatNumber.toString()
+//            updateUI()
         }
     }
 
@@ -129,12 +140,12 @@ class SelectSeatActivity : AppCompatActivity() {
         binding.cardSelectedSeat.visibility = View.GONE
     }
 
-    private fun updateUI() {
-        val getBusId = intent.getIntExtra("value",0)
-        val totalPrice = if (selectedSeat != null) getBusId else 0
-        binding.tvTotalPrice.text = "Rp ${NumberFormat.getNumberInstance(Locale("id", "ID")).format(totalPrice)}"
-        binding.btnContinue.isEnabled = selectedSeat != null
-    }
+//    private fun updateUI() {
+//        val getBusId = intent.getIntExtra("value",0)
+//        val totalPrice = if (selectedSeat != null) getBusId else 0
+//        binding.tvTotalPrice.text = "Rp ${NumberFormat.getNumberInstance(Locale("id", "ID")).format(totalPrice)}"
+//        binding.btnContinue.isEnabled = selectedSeat != null
+//    }
 
 
 }
