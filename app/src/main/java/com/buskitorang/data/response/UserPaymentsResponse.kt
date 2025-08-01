@@ -4,17 +4,50 @@ import com.google.gson.annotations.SerializedName
 
 data class UserPaymentsResponse(
 
-	@field:SerializedName("UserPaymentsResponse")
-	val userPaymentsResponse: List<UserPaymentsResponseItem>
+	@field:SerializedName("UserPaymentResponse")
+	val userPaymentResponse: List<UserPaymentResponseItem>
 )
 
-data class Passenger(
+data class RoutePaymentUser(
+
+	@field:SerializedName("bus")
+	val bus: BusUserPayment,
+
+	@field:SerializedName("arrival_time")
+	val arrivalTime: String,
 
 	@field:SerializedName("updated_at")
 	val updatedAt: String,
 
-	@field:SerializedName("phone")
-	val phone: String,
+	@field:SerializedName("price")
+	val price: String,
+
+	@field:SerializedName("origin")
+	val origin: String,
+
+	@field:SerializedName("destination")
+	val destination: String,
+
+	@field:SerializedName("created_at")
+	val createdAt: String,
+
+	@field:SerializedName("id")
+	val id: Int,
+
+	@field:SerializedName("bus_id")
+	val busId: Int,
+
+	@field:SerializedName("departure_time")
+	val departureTime: String,
+
+	@field:SerializedName("status")
+	val status: String
+)
+
+data class BusUserPayment(
+
+	@field:SerializedName("updated_at")
+	val updatedAt: String,
 
 	@field:SerializedName("name")
 	val name: String,
@@ -25,8 +58,14 @@ data class Passenger(
 	@field:SerializedName("id")
 	val id: Int,
 
-	@field:SerializedName("email")
-	val email: String
+	@field:SerializedName("plate_number")
+	val plateNumber: String,
+
+	@field:SerializedName("total_seats")
+	val totalSeats: Int,
+
+	@field:SerializedName("status")
+	val status: String
 )
 
 data class Ticket(
@@ -34,11 +73,11 @@ data class Ticket(
 	@field:SerializedName("route_id")
 	val routeId: Int,
 
+	@field:SerializedName("route")
+	val route: RoutePaymentUser,
+
 	@field:SerializedName("updated_at")
 	val updatedAt: String,
-
-	@field:SerializedName("passenger")
-	val passenger: Passenger,
 
 	@field:SerializedName("seat_number")
 	val seatNumber: Int,
@@ -62,7 +101,7 @@ data class Ticket(
 	val status: String
 )
 
-data class UserPaymentsResponseItem(
+data class UserPaymentResponseItem(
 
 	@field:SerializedName("transaction_id")
 	val transactionId: Any,

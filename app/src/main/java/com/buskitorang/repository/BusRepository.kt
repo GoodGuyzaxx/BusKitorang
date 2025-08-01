@@ -3,12 +3,12 @@ package com.buskitorang.repository
 import com.buskitorang.data.response.DetailBusResponse
 import com.buskitorang.data.response.LoginResponse
 import com.buskitorang.data.response.LogoutResponse
+import com.buskitorang.data.response.PaymentResponse
 import com.buskitorang.data.response.RegisterResponse
 import com.buskitorang.data.response.RouteOriginResponse
 import com.buskitorang.data.response.TicketsByRouteResponse
 import com.buskitorang.data.response.TicketsByRouteResponseItem
-import com.buskitorang.data.response.UserPaymentsResponse
-import com.buskitorang.data.response.UserPaymentsResponseItem
+import com.buskitorang.data.response.UserPaymentResponseItem
 import com.buskitorang.data.response.UserTicketsResponse
 import com.buskitorang.data.response.UserTicketsResponseItem
 import com.buskitorang.data.retrofit.ApiServices
@@ -43,7 +43,11 @@ class BusRepository(private val apiServices: ApiServices) {
         return apiServices.getUserTickets(token)
     }
 
-    suspend fun getUserPayments(id : Int): List<UserPaymentsResponseItem> {
+    suspend fun getUserPayments(id : Int): List<UserPaymentResponseItem> {
         return apiServices.getUserPayments(id)
+    }
+
+    suspend fun postPayment(token: String, routeId: Int, seatNumber: Int): PaymentResponse {
+        return apiServices.postPayment(token,routeId,seatNumber)
     }
 }

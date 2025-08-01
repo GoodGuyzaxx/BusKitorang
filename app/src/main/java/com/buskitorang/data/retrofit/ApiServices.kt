@@ -4,13 +4,13 @@ package com.buskitorang.data.retrofit
 import com.buskitorang.data.response.DetailBusResponse
 import com.buskitorang.data.response.LoginResponse
 import com.buskitorang.data.response.LogoutResponse
+import com.buskitorang.data.response.PaymentResponse
 import com.buskitorang.data.response.RegisterResponse
 import com.buskitorang.data.response.RouteOriginResponse
 import com.buskitorang.data.response.TicketsByRouteResponse
 import com.buskitorang.data.response.TicketsByRouteResponseItem
-import com.buskitorang.data.response.UserPaymentsResponse
-import com.buskitorang.data.response.UserPaymentsResponseItem
-import com.buskitorang.data.response.UserTicketsResponse
+import com.buskitorang.data.response.UserPaymentResponseItem
+
 import com.buskitorang.data.response.UserTicketsResponseItem
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -76,9 +76,18 @@ interface ApiServices
     @Headers("Accept: application/json")
     suspend fun getUserPayments(
         @Path("id") id : Int
-    ): List<UserPaymentsResponseItem>
+    ): List<UserPaymentResponseItem>
 
 
+
+    @FormUrlEncoded
+    @POST("passenger/tickets")
+    @Headers("Accept: application/json")
+    suspend fun postPayment(
+        @Header("Authorization") token :String,
+        @Field("route_id") routeId : Int,
+        @Field("seat_number") seatNumber : Int
+    ): PaymentResponse
 
 
 }
