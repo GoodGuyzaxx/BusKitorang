@@ -62,4 +62,5 @@
     <string name="tempat_holder">%1$s → %2$s</string>
     <string name="time_holder">%1$s - %2$s</string>
     <string name="holer_dipesan">Dipesan: %s</string>
+    <string name="tiket_order_id_holder">Tiket ID: %s</string>
 </resources>
