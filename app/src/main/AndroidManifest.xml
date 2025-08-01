@@ -20,6 +20,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".views.redirectToPayment.RedirectPaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.detailtiket.DetailTiketActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.seat.SelectSeatActivity"
             android:exported="false" />
         <activity
